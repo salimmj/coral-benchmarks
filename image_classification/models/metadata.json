@@ -1,0 +1,16 @@
+[
+	{
+		"name": "Mobilenet_v2_1.0_224_inat_bird_quant",
+  		"dataset": "bird_images",
+		"tflite": "yes",
+  		"coral": "no",
+  		"quantized": "yes"
+	},
+	{
+		"name": "Mobilenet_v2_1.0_224_inat_bird_quant",
+		"dataset": "bird_iamges",
+		"tflite": "yes",
+		"coral":"no",
+		"quantized": "yes"
+	}
+]
