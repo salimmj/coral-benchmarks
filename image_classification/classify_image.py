@@ -32,7 +32,7 @@ import time
 
 from PIL import Image
 
-import classify
+from . import classify
 import tflite_runtime.interpreter as tflite
 import platform
 
@@ -72,6 +72,28 @@ def make_interpreter(model_file):
               tflite.load_delegate(EDGETPU_SHARED_LIB,
                   {'device': device[0]} if device else {})])
   
+
+def inference_model_on_image(model_filepath, image):
+    interpreter = make_interpreter(model_filepath)
+    interpreter.allocate_tensors()
+
+    size = classify.input_size(interpreter)
+    image = Image.open(image).convert('RGB').resize(size, Image.ANTIALIAS)
+    classify.set_input(interpreter, image)
+    def inference():
+        start = time.perf_counter()
+        interpreter.invoke()
+        return time.perf_counter() - start
+
+    first_inference = inference()
+    for _ in range(10):
+        # warmup
+        inference()
+    avg = 0
+    for _ in range(50):
+        avg += inference()
+    avg /= 50.0
+    return [first_inference, avg]
 
 
 def main():
