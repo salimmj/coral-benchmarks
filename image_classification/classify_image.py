@@ -33,6 +33,7 @@ import time
 from PIL import Image
 
 from . import classify
+
 import tflite_runtime.interpreter as tflite
 import platform
 
@@ -86,13 +87,13 @@ def inference_model_on_image(model_filepath, image):
         return time.perf_counter() - start
 
     first_inference = inference()
-    for _ in range(10):
+    for _ in range(4):
         # warmup
         inference()
     avg = 0
-    for _ in range(50):
+    for _ in range(40):
         avg += inference()
-    avg /= 50.0
+    avg /= 40.0
     return [first_inference, avg]
 
 

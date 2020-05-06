@@ -11,6 +11,8 @@ from image_classification.classify_image import *
 LIST_OF_PROJECTS = {
         'image_classification': inference_model_on_image,
         }
+def _print_exp_id(lst):
+    print('Running experiment {}'.format('_'.join(lst))) 
 
 def run_full_experiment():
     # for each project
@@ -29,10 +31,12 @@ def run_full_experiment():
             model_files = list(filter(lambda x: '.tflite' in x, listdir(model_path)))
             for mfile in model_files:
                 edgetpu = 'edgetpu' in mfile
+                mfile_path = '/'.join([model_path, mfile])
                 for image in listdir(data_path):
-                    results.append([p, m, quant, edgetpu, *LIST_OF_PROJECTS[p](mfile, '/'.join([p, 'data', image]))])
+                    _print_exp_id([p, m])
+                    results.append([p, m, quant, edgetpu, image ,*LIST_OF_PROJECTS[p](mfile_path, '/'.join([p, 'data', image]))])
     return results
 
 if __name__=='__main__':
-    df = pd.DataFrame(run_full_experiment(), columns=['project', 'model', 'quant', 'edgetpu']) 
+    df = pd.DataFrame(run_full_experiment(), columns=['project', 'model', 'quant', 'edgetpu', 'image', 'first_inference', 'average']) 
     df.to_csv('results.csv', index=False)
