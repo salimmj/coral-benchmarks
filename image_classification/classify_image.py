@@ -67,11 +67,11 @@ def load_labels(path, encoding='utf-8'):
 def make_interpreter(model_file):
   model_file, *device = model_file.split('@')
   return tflite.Interpreter(
-      model_path=model_file,
-      experimental_delegates=[
-          tflite.load_delegate(EDGETPU_SHARED_LIB,
-                               {'device': device[0]} if device else {})
-      ])
+          model_path=model_file,
+          experimental_delegates=[
+              tflite.load_delegate(EDGETPU_SHARED_LIB,
+                  {'device': device[0]} if device else {})])
+  
 
 
 def main():
@@ -93,7 +93,6 @@ def main():
       '-c', '--count', type=int, default=5,
       help='Number of times to run inference')
   args = parser.parse_args()
-
   labels = load_labels(args.labels) if args.labels else {}
 
   interpreter = make_interpreter(args.model)
