@@ -39,4 +39,4 @@ def run_full_experiment():
 
 if __name__=='__main__':
     df = pd.DataFrame(run_full_experiment(), columns=['project', 'model', 'quant', 'edgetpu', 'image', 'first_inference', 'average']) 
-    df.to_csv('results.csv', index=False)
+    df.to_csv('tmp_results.csv', index=False)
